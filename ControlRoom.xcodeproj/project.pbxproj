@@ -240,13 +240,10 @@
 			children = (
 				51AB56E12A13D3D1002B5A67 /* SystemView */,
 				51B0241B25C3103B0042394E /* AppView */,
-				70BE435923F54B7200FD6282 /* LocationView.swift */,
-				BEB411702A1CF841008BAB31 /* HeadingView.swift */,
-				BECE39A22A169FF80089AE62 /* GPXUploaderView.swift */,
+				BE6AE3B22A26BB530086B658 /* LocationView */,
 				519732492A0863B400B1F68C /* OverridesView.swift */,
 				511BA59F23F4197200E3E660 /* StatusBarView.swift */,
 				51AB56E82A141055002B5A67 /* ColorsView.swift */,
-				BECE39A42A16A0490089AE62 /* Parser.swift */,
 			);
 			path = ControlScreens;
 			sourceTree = "<group>";
@@ -439,6 +436,17 @@
 				B07F585023F9F83800256D5D /* SimCtl+SubCommandsTests.swift */,
 			);
 			path = Controllers;
+			sourceTree = "<group>";
+		};
+		BE6AE3B22A26BB530086B658 /* LocationView */ = {
+			isa = PBXGroup;
+			children = (
+				70BE435923F54B7200FD6282 /* LocationView.swift */,
+				BEB411702A1CF841008BAB31 /* HeadingView.swift */,
+				BECE39A22A169FF80089AE62 /* GPXUploaderView.swift */,
+				BECE39A42A16A0490089AE62 /* Parser.swift */,
+			);
+			path = LocationView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

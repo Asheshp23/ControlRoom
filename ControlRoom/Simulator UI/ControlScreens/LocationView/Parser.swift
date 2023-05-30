@@ -11,7 +11,6 @@ class Parser {
         parser.delegate = coordinateParser
         let success = parser.parse()
         guard success else { return nil }
-        print(coordinateParser.coordinates)
         return coordinateParser.coordinates
     }
 }

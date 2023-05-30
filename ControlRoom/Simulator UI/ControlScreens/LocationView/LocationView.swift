@@ -90,15 +90,10 @@ struct LocationView: View {
                         if currentIndex == simulatableLocations.count {
                             currentIndex = 0
                         }
-                        isSimulating = true
+                        isSimulating = !isSimulating
                         simulateLocation()
                     } label: {
-                        Text((currentIndex == simulatableLocations.count) ? "Restart" : "Start")
-                    }
-                    Button {
-                        isSimulating = false
-                    } label: {
-                        Text("Stop")
+                      Text(isSimulating ? "Stop" : (currentIndex == simulatableLocations.count) ? "Restart" : (currentIndex > 0) ? "Resume" : "Start")
                     }
                 }
             }
@@ -121,7 +116,6 @@ struct LocationView: View {
                     .frame(width: 60)
                 }.padding(.vertical, 5)
             }
-
             Section("Direction") {
                 HStack {
                     Slider(value: $directionDeg, in: 0...360, step: 1)
@@ -238,6 +232,8 @@ struct LocationView: View {
             currentIndex += 1
             simulatedLocation = CLLocationCoordinate2D(latitude: element.latitude, longitude: element.longitude)
             changeSimulationLocation()
+        } else {
+          isSimulating = false
         }
     }
     func toggleRotationTarget() {
