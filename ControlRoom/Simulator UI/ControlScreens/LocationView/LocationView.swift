@@ -37,7 +37,7 @@ struct LocationView: View {
     @State var currentIndex = 0
     @State private var isJittering: Bool = false
     @State private var isSimulating: Bool = false
-    @State private var selectedOption = "Update coordinates using text field"
+    @State private var selectedOption = "entering values in a text field"
     private let options = [
         "entering values in a text field",
         "importing a GPX file",
