@@ -76,7 +76,6 @@
 		ACDF076823F7E91A00597B3B /* ApplicationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = ACDF076723F7E91A00597B3B /* ApplicationType.swift */; };
 		B07F584923F99A1700256D5D /* SimCtl+SubCommands.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07F584823F99A1700256D5D /* SimCtl+SubCommands.swift */; };
 		B07F585123F9F83800256D5D /* SimCtl+SubCommandsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = B07F585023F9F83800256D5D /* SimCtl+SubCommandsTests.swift */; };
-		BEB411712A1CF841008BAB31 /* HeadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEB411702A1CF841008BAB31 /* HeadingView.swift */; };
 		BECE39A32A169FF80089AE62 /* GPXUploaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECE39A22A169FF80089AE62 /* GPXUploaderView.swift */; };
 		BECE39A52A16A0490089AE62 /* Parser.swift in Sources */ = {isa = PBXBuildFile; fileRef = BECE39A42A16A0490089AE62 /* Parser.swift */; };
 /* End PBXBuildFile section */
@@ -166,7 +165,6 @@
 		B07F584E23F9F83800256D5D /* ControlRoomTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ControlRoomTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B07F585023F9F83800256D5D /* SimCtl+SubCommandsTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SimCtl+SubCommandsTests.swift"; sourceTree = "<group>"; };
 		B07F585223F9F83800256D5D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		BEB411702A1CF841008BAB31 /* HeadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeadingView.swift; sourceTree = "<group>"; };
 		BECE39A22A169FF80089AE62 /* GPXUploaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GPXUploaderView.swift; sourceTree = "<group>"; };
 		BECE39A42A16A0490089AE62 /* Parser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Parser.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -442,7 +440,6 @@
 			isa = PBXGroup;
 			children = (
 				70BE435923F54B7200FD6282 /* LocationView.swift */,
-				BEB411702A1CF841008BAB31 /* HeadingView.swift */,
 				BECE39A22A169FF80089AE62 /* GPXUploaderView.swift */,
 				BECE39A42A16A0490089AE62 /* Parser.swift */,
 			);
@@ -605,7 +602,6 @@
 				ACDF076623F7D1C300597B3B /* Application.swift in Sources */,
 				5534158623FE1AC4005C0A41 /* Flow.swift in Sources */,
 				51B0241D25C3104C0042394E /* AppIcon.swift in Sources */,
-				BEB411712A1CF841008BAB31 /* HeadingView.swift in Sources */,
 				511BA5A823F42EE400E3E660 /* AppView.swift in Sources */,
 				5523A7E123F99D7200F25EEC /* Preferences.swift in Sources */,
 				51AB56E02A13D189002B5A67 /* DeepLinksController.swift in Sources */,

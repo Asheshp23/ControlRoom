@@ -22,7 +22,7 @@ class CoordinatesParser: NSObject, XMLParserDelegate {
         coordinates = [CLLocationCoordinate2D]()
     }
 
-    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
+    func parser(_ parser: XMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String: String]) {
         guard elementName == "trkpt" || elementName == "wpt" else { return }
         guard let latString = attributeDict["lat"], let lonString = attributeDict["lon"] else { return }
         guard let lat = Double(latString), let lon = Double(lonString) else { return }

@@ -10,6 +10,15 @@ import MapKit
 import SwiftUI
 import CoreLocation
 
+enum InputOption: String, CaseIterable, Identifiable {
+  case enteringText = "Entering latitude and longitude"
+  case importingGPX = "Importing GPX File"
+  var id: String { self.rawValue }
+  var description: String {
+    return self.rawValue
+  }
+}
+
 /// Map view to change simulated user's position
 struct LocationView: View {
     @ObservedObject var controller: SimulatorsController
@@ -17,10 +26,6 @@ struct LocationView: View {
     static let DEFAULT_LAT = 37.323056
     static let DEFAULT_LNG = -122.031944
 
-    @State var directionDeg: Double = 25.0
-    @State var rotationTarget = RotationTarget.arrow
-    @State var distance: Double = 200
-    @State var distanceUnit = MeasurementUnits.metric
     @State private var latitudeText = "\(DEFAULT_LAT)"
     @State private var longitudeText = "\(DEFAULT_LNG)"
     /// The location that is being simulated
@@ -37,14 +42,21 @@ struct LocationView: View {
     @State var currentIndex = 0
     @State private var isJittering: Bool = false
     @State private var isSimulating: Bool = false
-    @State private var selectedOption = "entering values in a text field"
-    private let options = [
-        "entering values in a text field",
-        "importing a GPX file",
-        "moving it with entered distance and selected direction"
-    ]
+    @State private var selectedOption: InputOption = .enteringText
+
     private let simulaterTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
     private let jitterTimer = Timer.publish(every: 1, on: .main, in: .common).autoconnect()
+    private var simulationButtonLabel: String {
+        if isSimulating {
+            return "Stop"
+        } else if currentIndex == simulatableLocations.count {
+            return "Restart"
+        } else if currentIndex > 0 {
+            return "Resume"
+        } else {
+            return "Start"
+        }
+    }
 
     var annotations: [CLLocationCoordinate2D] {
         if let pinnedLocation = pinnedLocation {
@@ -60,7 +72,7 @@ struct LocationView: View {
         return String(format: "%.5f, %.5f", location.latitude, location.longitude)
     }
 
-    var latLongTF: some View {
+    var coordinatesInputView: some View {
         VStack {
             HStack(spacing: 10.0) {
                 TextField("Latitude", text: $latitudeText)
@@ -70,13 +82,8 @@ struct LocationView: View {
                     .textFieldStyle(.roundedBorder)
             }
 
-            Button("Update coordinates") {
-                if let latitude = Double(latitudeText),
-                   let longitude = Double(longitudeText) {
-                    self.currentLocation = MKCoordinateRegion(
-                        center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
-                        span: MKCoordinateSpan(latitudeDelta: 15, longitudeDelta: 15))
-                }
+            Button(action: updateCoordinates) {
+                Text("Update coordinates")
             }
         }
     }
@@ -86,54 +93,23 @@ struct LocationView: View {
             GPXUploaderView(coords: $simulatableLocations)
             if !simulatableLocations.isEmpty {
                 HStack {
-                    Button {
-                        if currentIndex == simulatableLocations.count {
-                            currentIndex = 0
-                        }
-                        isSimulating = !isSimulating
-                        simulateLocation()
-                    } label: {
-                      Text(isSimulating ? "Stop" : (currentIndex == simulatableLocations.count) ? "Restart" : (currentIndex > 0) ? "Resume" : "Start")
+                  Button(action: toggleSimulation) {
+                      Text(simulationButtonLabel)
                     }
                 }
             }
         }
     }
 
-    var headingAndDistanceView: some View {
-        VStack(alignment: .leading) {
-            Section("Distance") {
-                HStack {
-                    Slider(value: $distance, in: 0...2000, step: 10)
-                        .padding(.trailing)
-                        .accentColor(Color.red)
-                    Text("\(Int(distance.rounded(.down)))")
-
-                    Picker("", selection: $distanceUnit) {
-                        Text(MeasurementUnits.metric.rawValue).tag(MeasurementUnits.metric)
-                        Text(MeasurementUnits.imperial.rawValue).tag(MeasurementUnits.imperial)
-                    }
-                    .frame(width: 60)
-                }.padding(.vertical, 5)
+    var updateCoordinatesOptionMenu: some View {
+        Picker(selection: $selectedOption, label: Text("Update coordinates by:")) {
+            ForEach(InputOption.allCases) { option in
+                Text(option.description)
+                    .tag(option)
             }
-            Section("Direction") {
-                HStack {
-                    Slider(value: $directionDeg, in: 0...360, step: 1)
-                        .padding(.trailing)
-                        .accentColor(Color.red)
-                    Text("\(Int(directionDeg.rounded(.down)))°")
-                }.padding(.vertical, 5)
-            }
-            HeadingView(
-                region: $currentLocation,
-                simulator: simulator,
-                distance: distance,
-                distanceUnit: distanceUnit,
-                directionDeg: directionDeg,
-                rotationTarget: rotationTarget
-            )
         }
-        .frame(maxWidth: .infinity)
+        .pickerStyle(MenuPickerStyle())
+        .padding(.bottom)
     }
 
     var body: some View {
@@ -141,19 +117,12 @@ struct LocationView: View {
             VStack {
                 Text("Move the map wherever you want, then click Activate to update the simulator to match your centered coordinate.")
 
-                Picker(selection: $selectedOption, label: Text("Update coordinates by:")) {
-                    ForEach(options, id: \.self) { option in
-                        Text(option)
-                    }
-                }
-                .pickerStyle(MenuPickerStyle())
-
-                if selectedOption == "entering values in a text field" {
-                    latLongTF
-                } else if selectedOption == "importing a GPX file" {
+                updateCoordinatesOptionMenu
+  
+                if selectedOption == .enteringText {
+                    coordinatesInputView
+                } else if selectedOption == .importingGPX {
                     gpxUploaderView
-                } else {
-                    headingAndDistanceView
                 }
                 ZStack {
                     Map(coordinateRegion: $currentLocation, annotationItems: annotations) { location in
@@ -236,7 +205,21 @@ struct LocationView: View {
           isSimulating = false
         }
     }
-    func toggleRotationTarget() {
-        rotationTarget = rotationTarget == .point ? .arrow : .point
+
+    private func updateCoordinates() {
+        if let latitude = Double(latitudeText),
+           let longitude = Double(longitudeText) {
+            self.currentLocation = MKCoordinateRegion(
+              center: CLLocationCoordinate2D(latitude: latitude, longitude: longitude),
+              span: MKCoordinateSpan(latitudeDelta: 15, longitudeDelta: 15))
+        }
+    }
+
+    private func toggleSimulation() {
+        if currentIndex == simulatableLocations.count {
+            currentIndex = 0
+        }
+        isSimulating.toggle()
+        simulateLocation()
     }
 }
